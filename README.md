@@ -10,3 +10,8 @@ Test bench: Applies the values at input port at following times:
   15 ns: A= 7, B= 8
 
 Whenever the value changes at the output port of adder, the testbench should print the value of this port and the simulation time
+SOLUTION 
+The code part is divided in 3 parts 
+1. adder.h -> contains the basic logic for adder 
+2. testbench.h -> contains the testbench
+3. main.cpp 
