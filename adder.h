@@ -10,7 +10,7 @@ SC_MODULE(Adder){
     }
   }
   SC_CTOR(Adder){
-    SC_METHOD(adding);
+    SC_THREAD(adding);//as to introduce wait
     sensitive<<a<<b;
   }
 };
