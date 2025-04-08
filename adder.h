@@ -10,7 +10,7 @@ SC_MODULE(Adder){
     }
   }
   SC_CTOR(Adder){
-    SC_THREAD(adding);
+    SC_METHOD(adding);
     sensitive<<a<<b;
   }
 };
