@@ -1,22 +1,33 @@
 #include <systemc.h>
-#include<design.cpp>
-int sc_main(int argc, char* argv[])
-{
+#include<adder.h>
+SC_MODULE(Testbench){
   sc_signal<int> a_sig,b_sig,c_sig;
-  Adder adder("Adder");
-  adder.a(a_sig);
-  adder.b(b_sig);
-  adder.c(c_sig);
-  sc_start(0,SC_NS);
-  a_sig.write(3);
-  b_sig.write(4);
-  sc_start(1,SC_NS);
-  cout<<"At "<<sc_time_stamp()<<" c=  "<<c_sig.read()<<endl;
-  a_sig.write(7);
-  sc_start(3,SC_NS);
-    cout<<"At "<<sc_time_stamp()<<" c= "<<c_sig.read()<<endl;
-	a_sig.write(9);
-  sc_start(6,SC_NS);
-  cout<<"AT"<<sc_time_stamp()<<"c="<<c_sig.read()<<endl;
-  return 0;
+  Adder* adder;
+Void adding_delay(){
+a_sig=0;
+b_sig=0;
+wait(5,SC_NS);
+a_sig=5;
+b_sig=7;
+wait(4,SC_NS);
+b_sig=10;
+wait(3,SC_NS);
+a_sig=7;
+b_sig=8;
+wait(5,SC_NS);
+void monitor(){
+while(true){
+wait();
+SC_REPORT<<"@"<<sc_time_stamp()<<"output"<<c_sig.read()<<endl;}
 }
+SC_CTOR(Testbench){
+adder = new adder("adder");
+  adder->a(a_sig); 
+  adder->b(b_sig);
+  adder->c(c_sig);
+SC_THREAD(adding_delay);
+SC_METHOD(monitor);
+sensetive<<c_sig;
+}
+};
+  
