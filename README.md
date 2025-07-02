@@ -17,19 +17,3 @@ The code part is divided in 3 parts
 3. main.cpp 
 
 
-Resuming Work – Request for New Task or Model Suggestion
-
-Dear Fahmy,
-
-I hope this message finds you well.
-
-I have now resumed working after taking two weeks of rest due to a slipped disc. The prolonged sitting had become quite dangerous to my health, and the break was necessary for recovery.
-
-I’m now ready to get back to work and was wondering if you could share a new problem statement or suggest a model where I can start contributing. I’m eager to engage with something fresh and meaningful.
-
-Also, I will share the link to the adder I had previously worked on in the description below for your reference.
-
-Looking forward to hearing from you.
-
-Best regards,
-Shubhro
