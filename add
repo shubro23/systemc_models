@@ -1,0 +1,104 @@
+#include <systemc.h>
+
+#include<design.cpp>
+SC_MODULE(Testbench){
+  sc_signal<int> a_sig,b_sig,c_sig;
+  Adder* adder;
+void adding_delay(){
+ // std::cout<<"@"<<sc_time_stamp()<<"Line 8 ***** output= "<<c_sig.read()<<endl;
+  //wait(1,SC_NS);
+a_sig=1;b_sig=1;
+wait(2,SC_NS);
+ // std::cout<<"@"<<sc_time_stamp()<<"Line 12***** output= "<<c_sig.read()<<endl;
+
+a_sig=2;b_sig=1;
+wait(2,SC_NS);
+
+a_sig=3;b_sig=1;
+wait(2,SC_NS);
+
+a_sig=3;b_sig=2;
+wait(2,SC_NS);
+
+a_sig=2;b_sig=2;
+wait(2,SC_NS);
+
+a_sig=2;b_sig=3;
+wait(2,SC_NS);
+
+a_sig=2;b_sig=5;
+wait(2,SC_NS);
+
+a_sig=3;b_sig=3;
+wait(2,SC_NS);
+
+a_sig=3;b_sig=3;
+wait(2,SC_NS);
+  
+a_sig=3;b_sig=3;
+wait(2,SC_NS);
+
+  //std::cout<<"@"<<sc_time_stamp()<<"Line 39***** output= "<<c_sig.read()<<endl;
+}
+void monitor(){
+ // std::cout<<"@"<<sc_time_stamp()<<"Line 42***** output= "<<c_sig.read()<<endl;
+  int expected_vals[]={2,3,4,5,4,5,7,6,6,6};
+   wait(2,SC_NS);
+  for(int i=0;i<10;i++){
+//wait();
+  wait(2,SC_NS); 
+ //  std::cout<<"@"<<sc_time_stamp()<<"Line 25***** output= "<<c_sig.read()<<endl;
+  int expected=expected_vals[i];
+  int actual=c_sig.read();
+  if(expected==actual)
+  {
+    std::cout<<"@"<<sc_time_stamp()<<"[PASS] output ="<<c_sig.read()<<endl;
+  }
+  else{
+    std::cout<<"@"<<sc_time_stamp()<<"[FAIL] output ="<<c_sig.read()<<endl;
+    
+  }
+  }
+  //wait(2, SC_NS);
+//std::cout<<"@"<<sc_time_stamp()<<"output"<<c_sig.read()<<endl;}
+}
+SC_CTOR(Testbench){
+adder = new Adder("adder");
+  adder->a(a_sig); 
+  adder->b(b_sig);
+  adder->c(c_sig);
+SC_THREAD(adding_delay);
+SC_THREAD(monitor);
+//sensitive<<c_sig;
+}
+};
+int sc_main(int argc, char* argv[]){
+ // std::cout<<"@"<<sc_time_stamp()<<"Line 74"<<endl;
+  Testbench tb("tb");
+sc_start(22,SC_NS);
+return 0;
+}
+
+
+#include <systemc.h>
+SC_MODULE(Adder){
+  sc_in<int>a;
+  sc_in<int>b;
+  sc_out<int>c;
+  void adding(){
+  //  std::cout<<"inside tHREAD ***** output= "<<c.read()<<"@"<<sc_time_stamp()<<endl;
+    while(true){ 
+      //wait(2,SC_NS);
+   //   std::cout<<"@"<<sc_time_stamp()<<"Line 10***** output= "<<c.read()<<endl;
+      std::cout<<"a="<<a.read()<<" b="<<b.read()<<" c ="<<c.read()<<endl;
+      std::cout<<"@"<<sc_time_stamp()<<endl;
+      c.write(a.read()+b.read());
+      wait(2,SC_NS); 
+     // std::cout<<"@"<<sc_time_stamp()<<"Line 13***** output= "<<c.read()<<endl;
+    }
+  }
+  SC_CTOR(Adder){
+    SC_THREAD(adding);
+    
+  }
+};
