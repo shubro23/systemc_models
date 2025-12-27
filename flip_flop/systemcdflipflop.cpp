@@ -28,7 +28,7 @@ int sc_main(int argc, char* argv[]){
   sc_start(5, SC_NS); // Now we are at 12ns
   cout << "@" << sc_time_stamp() << " After clock edge, b is: " << s_b.read() << endl;
 }
-  ????????????//////////design 
+ //////////design 
 
 #include<systemc.h>
 SC_MODULE(dff){
