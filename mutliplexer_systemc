@@ -1,0 +1,77 @@
+this file contain the code of multiplexer 4 in 1 and 1 select line 
+
+design code
+#include <systemc.h>
+
+SC_MODULE(mux4to1) {
+    // Inputs: 4 Data lines and 1 Select line (2-bit)
+    sc_in<int> a, b, c, d;
+    sc_in<sc_uint<2>> sel;
+    
+    // Output
+    sc_out<int> out;
+
+    
+    void multiplex() {
+        switch(sel.read()) {
+            case 0: out.write(a.read()); break;
+            case 1: out.write(b.read()); break;
+            case 2: out.write(c.read()); break;
+            case 3: out.write(d.read()); break;
+            default: break; 
+        }
+    }
+
+    SC_CTOR(mux4to1) {
+        SC_METHOD(multiplex);
+        // Sensitive to ALL inputs because it's combinational logic
+        sensitive << a << b << c << d << sel;
+    }
+};
+//////////////Test bench code ///////////////////
+
+
+
+#include <systemc.h>
+#include "design.cpp"
+
+int sc_main(int argc, char* argv[]) {
+    // Signals to connect to the Mux
+    sc_signal<int> sig_a, sig_b, sig_c, sig_d;
+    sc_signal<sc_uint<2>> sig_sel;
+    sc_signal<int> sig_out;
+
+    // Instantiate the Mux
+    mux4to1 dut("MUX");
+    dut.a(sig_a);
+    dut.b(sig_b);
+    dut.c(sig_c);
+    dut.d(sig_d);
+    dut.sel(sig_sel);
+    dut.out(sig_out);
+
+    // Initialize values
+    sig_a = 10; sig_b = 20; sig_c = 30; sig_d = 40;
+
+    cout << "Starting Mux Simulation..." << endl;
+
+    // Test Case 1: Select Input A
+    sig_sel = 0;
+    sc_start(1, SC_NS);
+    cout << "@" << sc_time_stamp() << " Sel: " << sig_sel << " Out: " << sig_out << endl;
+
+    // Test Case 2: Select Input C
+    sig_sel = 2;
+    sc_start(1, SC_NS);
+    cout << "@" << sc_time_stamp() << " Sel: " << sig_sel << " Out: " << sig_out << endl;
+
+    // Test Case 3: Change value of Input C while it is selected
+    sig_c = 99; 
+    sc_start(1, SC_NS);
+    cout << "@" << sc_time_stamp() << " Changed Input C to 99. Out: " << sig_out << endl;
+
+    return 0;
+}
+
+
+
